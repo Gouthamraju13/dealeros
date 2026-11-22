@@ -1,0 +1,7 @@
+.venv/
+node_modules/
+db.sqlite3
+__pycache__/
+*.pyc
+frontend/dist/
+.pytest_cache/
