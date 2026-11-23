@@ -51,21 +51,3 @@ It finds seven kinds of disagreement: the four required ones (MISSING_IN_B, ORPH
 ## What I deliberately did not build
 
 Login, pagination, Docker, a pretty design, and extra filters. The org picker is not real security, because there is no login: the API does keep the orgs apart, but anyone who can reach it can ask for either org. A real version would take the org from the signed-in user. I spent my time on the importer's safety, the comparison rules, the tests and keeping the orgs separate.
-
-## How I worked with the agent
-
-TODO
-
-## The three questions
-
-**a. One thing the AI agent got wrong, and how I noticed.**
-
-TODO
-
-**b. The part I am least confident about, and why.**
-
-TODO
-
-**c. If I had a second day, what I would fix first.**
-
-TODO
