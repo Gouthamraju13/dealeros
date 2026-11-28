@@ -4,6 +4,8 @@ Two systems, A and B, record the same business events. This app loads both expor
 
 The stack is Django (with Django REST Framework) and SQLite on the backend, and React (Vite) on the front.
 
+Live demo: https://dealeros-khaki.vercel.app
+
 ## How to run it
 
 You need Python 3.11 or newer, Node.js 18 or newer, and Git. Start from a fresh clone and run these in order.
@@ -51,3 +53,24 @@ It finds seven kinds of disagreement: the four required ones (MISSING_IN_B, ORPH
 ## What I deliberately did not build
 
 Login, pagination, Docker, a pretty design, and extra filters. The org picker is not real security, because there is no login: the API does keep the orgs apart, but anyone who can reach it can ask for either org. A real version would take the org from the signed-in user. I spent my time on the importer's safety, the comparison rules, the tests and keeping the orgs separate.
+
+
+## How I worked with the agent
+
+I used Claude as my coding agent. It first built a working version and tested it, then walked me through rebuilding the whole project by hand, one small step at a time. I typed or pasted each file myself, ran each command, and asked questions when I did not understand something. For example, I asked why the importer could not run before the other files existed, and it explained that the importer is only a set of instructions and needs the command file as a "button" to run it.
+
+I checked the agent's work with my own eyes instead of trusting it. I ran the importer twice and made sure the counts stayed the same (120 rows from A and 121 from B saved). I ran the tests (19 for the comparison rules, 31 in total). I broke the code on purpose, first by flagging every split as a duplicate and then by removing the org filter, and watched the tests fail before putting it back. I also opened the page in my browser and checked that ORG-B never shows an ORG-A location.
+
+## The three questions
+
+**a. One thing the AI agent got wrong, and how I noticed.**
+
+When I was creating the folders, the agent gave me several PowerShell commands to paste at once. Only some of them ran, so the `management` and `tests` folders were missing and one command failed with "Could not find a part of the path". I noticed because the file list in VS Code did not match what the agent described, and there was red error text in the terminal. We fixed it by running the commands one at a time and checking the file list again.
+
+**b. The part I am least confident about, and why.**
+
+The VOIDED decision. If System A says a record is voided but System B still has an entry, I flag it as VOIDED_IN_A. Someone could reasonably say that B's entry is expected and not an error. I am also not fully sure about the cross-org row (REC-1077): only ORG-A sees it, and ORG-B is never told about its stray entry. If I had more time, I would ask what the reviewers expect in both cases.
+
+**c. If I had a second day, what I would fix first.**
+
+Login. Right now the org comes from the web address, so anyone who can reach the API could ask for the other org's data. It comes first because keeping the two companies apart is the main point of the assignment, and a real fix would take the org from the signed-in user instead of the address.
